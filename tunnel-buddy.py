@@ -1,10 +1,10 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, CallbackContext
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 
 # Токен вашего бота
 TOKEN = '7906261755:AAHniCWm-5ybmJvFReY7iO8OJi64LvosM_I'
 
-async def start(update: Update, context: CallbackContext) -> None:
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     print("Бот запущен и ожидает команд.")
     keyboard = [
         [InlineKeyboardButton("Выбрать подписку", callback_data='choose_subscription')],
@@ -17,7 +17,7 @@ async def start(update: Update, context: CallbackContext) -> None:
         reply_markup=reply_markup
     )
 
-async def choose_subscription(update: Update, context: CallbackContext) -> None:
+async def choose_subscription(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     keyboard = [
         [InlineKeyboardButton("1 месяц / 2 USDT", callback_data='1_month')],
         [InlineKeyboardButton("3 месяца / 5 USDT", callback_data='3_months')],
@@ -27,7 +27,7 @@ async def choose_subscription(update: Update, context: CallbackContext) -> None:
     reply_markup = InlineKeyboardMarkup(keyboard)
     await update.callback_query.edit_message_text(text="Выберите подписку:", reply_markup=reply_markup)
 
-async def payment_method(update: Update, context: CallbackContext) -> None:
+async def payment_method(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     keyboard = [
         [InlineKeyboardButton("Оплатить картой", callback_data='pay_card')],
         [InlineKeyboardButton("Оплатить криптовалютой", callback_data='pay_crypto')],
@@ -36,7 +36,7 @@ async def payment_method(update: Update, context: CallbackContext) -> None:
     reply_markup = InlineKeyboardMarkup(keyboard)
     await update.callback_query.edit_message_text(text="Выберите способ оплаты:", reply_markup=reply_markup)
 
-async def button(update: Update, context: CallbackContext) -> None:
+async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     await query.answer()
 

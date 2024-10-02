@@ -4,19 +4,28 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Cont
 # Токен вашего бота
 TOKEN = '7906261755:AAHniCWm-5ybmJvFReY7iO8OJi64LvosM_I'
 
+# Стартовое меню
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    print("Бот запущен и ожидает команд.")
     keyboard = [
         [InlineKeyboardButton("Выбрать подписку", callback_data='choose_subscription')],
         [InlineKeyboardButton("Инструкция по пользованию", callback_data='instructions')]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    await update.message.reply_text(
-        "Добро пожаловать! Вот баннер-знакомство.",
-        reply_markup=reply_markup
-    )
+    # Если это сообщение, то используем message.reply_text
+    if update.message:
+        await update.message.reply_text(
+            "Добро пожаловать! Вот баннер-знакомство.",
+            reply_markup=reply_markup
+        )
+    # Если это callback, используем callback_query.edit_message_text
+    elif update.callback_query:
+        await update.callback_query.edit_message_text(
+            "Добро пожаловать! Вот баннер-знакомство.",
+            reply_markup=reply_markup
+        )
 
+# Меню выбора подписки
 async def choose_subscription(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     keyboard = [
         [InlineKeyboardButton("1 месяц / 2 USDT", callback_data='1_month')],
@@ -27,6 +36,7 @@ async def choose_subscription(update: Update, context: ContextTypes.DEFAULT_TYPE
     reply_markup = InlineKeyboardMarkup(keyboard)
     await update.callback_query.edit_message_text(text="Выберите подписку:", reply_markup=reply_markup)
 
+# Меню выбора способа оплаты
 async def payment_method(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     keyboard = [
         [InlineKeyboardButton("Оплатить картой", callback_data='pay_card')],
@@ -36,6 +46,7 @@ async def payment_method(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     reply_markup = InlineKeyboardMarkup(keyboard)
     await update.callback_query.edit_message_text(text="Выберите способ оплаты:", reply_markup=reply_markup)
 
+# Обработка всех callback-запросов
 async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     await query.answer()
@@ -76,6 +87,7 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     elif query.data == 'back_to_payment_method':
         await payment_method(update, context)
 
+# Основная функция для запуска бота
 def main():
     application = Application.builder().token(TOKEN).build()
 

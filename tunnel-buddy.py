@@ -1,9 +1,3 @@
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, CallbackContext
-
-# Токен вашего бота
-TOKEN = 'YOUR_BOT_TOKEN'
-
 async def start(update: Update, context: CallbackContext) -> None:
     keyboard = [
         [InlineKeyboardButton("Выбрать подписку", callback_data='choose_subscription')],

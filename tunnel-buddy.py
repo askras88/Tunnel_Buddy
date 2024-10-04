@@ -1,4 +1,4 @@
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, InputFile
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 
 # Токен вашего бота
@@ -27,7 +27,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             reply_markup=reply_markup
         )
         # Отправка изображения
-        await update.message.reply_photo(photo=InputFile(IMAGE_PATH))
+        await update.message.reply_photo(photo=IMAGE_PATH)  # Изменение здесь
 
     # Если это callback, используем callback_query.edit_message_text
     elif update.callback_query:

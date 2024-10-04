@@ -5,7 +5,7 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Cont
 TOKEN = '7906261755:AAHniCWm-5ybmJvFReY7iO8OJi64LvosM_I'
 
 # Прямая ссылка на изображение
-IMAGE_PATH = "https://freeimage.host/i/dbPhDcQ"  # Укажите здесь путь к изображению
+IMAGE_PATH = "https://iili.io/dbPhDcQ.jpg"  # Укажите здесь путь к изображению
 
 # Стартовое меню
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

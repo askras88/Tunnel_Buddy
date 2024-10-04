@@ -5,7 +5,7 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Cont
 TOKEN = '7906261755:AAHniCWm-5ybmJvFReY7iO8OJi64LvosM_I'
 
 # Путь к изображению
-IMAGE_PATH = "https://drive.google.com/file/d/1IQFt86p1I51Vj5kp6_7yjb8Y9Zsmoye0/view?usp=sharing"  # Укажите здесь путь к изображению
+IMAGE_PATH = "https://drive.google.com/file/d/1IQFt86p1I51Vj5kp6_7yjb8Y9Zsmoye0"  # Укажите здесь путь к изображению
 
 # Стартовое меню
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

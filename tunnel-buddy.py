@@ -1,8 +1,11 @@
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, InputFile
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 
 # Токен вашего бота
 TOKEN = '7906261755:AAHniCWm-5ybmJvFReY7iO8OJi64LvosM_I'
+
+# Путь к изображению
+IMAGE_PATH = "https://drive.google.com/file/d/1IQFt86p1I51Vj5kp6_7yjb8Y9Zsmoye0/view?usp=sharing"  # Укажите здесь путь к изображению
 
 # Стартовое меню
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -23,6 +26,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             "Подключай свои устройства и забудь о блокировках, как о своей последней неудачной криптоинвестиции! 😂",
             reply_markup=reply_markup
         )
+        # Отправка изображения
+        await update.message.reply_photo(photo=InputFile(IMAGE_PATH))
+
     # Если это callback, используем callback_query.edit_message_text
     elif update.callback_query:
         await update.callback_query.edit_message_text(

@@ -1,4 +1,4 @@
-# Стартовое меню
+# Стартовое меню (без elif)
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     keyboard = [
         [InlineKeyboardButton("Почему платный VPN лучше?", callback_data='why_paid_vpn')],

@@ -5,7 +5,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 bot = Bot(token="7906261755:AAHniCWm-5ybmJvFReY7iO8OJi64LvosM_I", request_timeout=30)
 
 # Инициализация бота с увеличенным таймаутом
-app = Application.builder().token("YOUR_TOKEN").bot(bot).build()
+app = Application.builder().token("7906261755:AAHniCWm-5ybmJvFReY7iO8OJi64LvosM_I").bot(bot).build()
 
 # Функция для команды /start
 async def start(update: Update, context):

@@ -2,7 +2,7 @@ from telegram import Bot, Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackContext, InlineKeyboardButton, InlineKeyboardMarkup
 
 # Увеличьте таймаут для запросов к API Telegram (в секундах)
-bot = Bot(token="YOUR_TOKEN", request_timeout=30)
+bot = Bot(token="7906261755:AAHniCWm-5ybmJvFReY7iO8OJi64LvosM_I", request_timeout=30)
 
 # Инициализация бота с увеличенным таймаутом
 app = Application.builder().token("YOUR_TOKEN").bot(bot).build()

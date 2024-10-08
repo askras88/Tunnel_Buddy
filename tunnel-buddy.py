@@ -1,12 +1,13 @@
-import logging
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler
+from telegram import Bot, Update
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackContext, InlineKeyboardButton, InlineKeyboardMarkup
 
-# Логирование
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
-logger = logging.getLogger(__name__)
+# Увеличьте таймаут для запросов к API Telegram (в секундах)
+bot = Bot(token="YOUR_TOKEN", request_timeout=30)
 
-# Приветственное сообщение и меню
+# Инициализация бота с увеличенным таймаутом
+app = Application.builder().token("YOUR_TOKEN").bot(bot).build()
+
+# Функция для команды /start
 async def start(update: Update, context):
     keyboard = [
         [InlineKeyboardButton("Почему платный VPN лучше?", callback_data='why_paid')],
@@ -72,7 +73,7 @@ async def pay_crypto(update: Update, context):
     await query.edit_message_text("Выберите способ оплаты:", reply_markup=reply_markup)
 
 # Оплата криптовалютой
-async def crypto_payment(update: Update, context):
+async def crypto_payment(update: Update, context: CallbackContext):
     query = update.callback_query
     await query.answer()
     
@@ -81,27 +82,34 @@ async def crypto_payment(update: Update, context):
     
     await query.edit_message_text(
         "💰 **Номер кошелька:** 0x34b46b61f1ea155de045c4b840932067c6087918\n"
-        "Принимаем $USDT в сетях: ERC20, BSC, POLYGON, BASE, SCROLL.\n\n"
-        "Нажмите сюда для копирования кошелька.",
+        "Принимаем $USDT в сетях: ERC20, BSC, POLYGON, BASE, SCROLL.\n\n",
         reply_markup=reply_markup
     )
 
 # Оплата картой
-async def card_payment(update: Update, context):
+async def card_payment(update: Update, context: CallbackContext):
     query = update.callback_query
     await query.answer()
     
-    keyboard = [[InlineKeyboardButton("Назад", callback_data='pay_crypto')]]
+    keyboard = [[InlineKeyboardButton("Скопировать номер карты", callback_data='copy_card_number')],
+                [InlineKeyboardButton("Назад", callback_data='pay_crypto')]]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
     await query.edit_message_text(
-        "💳 **Номер карты:** 2204320368112944\n"
-        "Нажмите сюда для копирования номера карты.",
+        "💳 Номер карты: 2204320368112944\n",
         reply_markup=reply_markup
     )
 
+# Обработчик копирования номера карты
+async def copy_card_number(update: Update, context: CallbackContext):
+    query = update.callback_query
+    await query.answer()
+    
+    # Копируем номер карты в кэш (в этом случае просто отправим его обратно пользователю)
+    await query.message.reply_text("Номер карты скопирован в кэш: 2204320368112944")
+
 # Инструкция по подключению
-async def setup_instructions(update: Update, context):
+async def setup_instructions(update: Update, context: CallbackContext):
     query = update.callback_query
     await query.answer()
     
@@ -115,7 +123,7 @@ async def setup_instructions(update: Update, context):
     await query.edit_message_text("Гайд по установке и добавлению VPN туннеля:", reply_markup=reply_markup)
 
 # Скачать приложение
-async def download_app(update: Update, context):
+async def download_app(update: Update, context: CallbackContext):
     query = update.callback_query
     await query.answer()
     
@@ -131,7 +139,7 @@ async def download_app(update: Update, context):
     await query.edit_message_text("Выберите ваше устройство:", reply_markup=reply_markup)
 
 # Добавить туннель
-async def add_tunnel(update: Update, context):
+async def add_tunnel(update: Update, context: CallbackContext):
     query = update.callback_query
     await query.answer()
     
@@ -150,7 +158,7 @@ async def add_tunnel(update: Update, context):
 
 # Главная функция для запуска бота
 def main():
-    application = ApplicationBuilder().token("7906261755:AAHniCWm-5ybmJvFReY7iO8OJi64LvosM_I").build()
+    application = Application.builder().token("7906261755:AAHniCWm-5ybmJvFReY7iO8OJi64LvosM_I").build()
 
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CallbackQueryHandler(why_paid, pattern='why_paid'))
@@ -158,6 +166,7 @@ def main():
     application.add_handler(CallbackQueryHandler(pay_crypto, pattern='pay_crypto'))
     application.add_handler(CallbackQueryHandler(crypto_payment, pattern='crypto_payment'))
     application.add_handler(CallbackQueryHandler(card_payment, pattern='card_payment'))
+    application.add_handler(CallbackQueryHandler(copy_card_number, pattern='copy_card_number'))  # Новый обработчик
     application.add_handler(CallbackQueryHandler(setup_instructions, pattern='setup_instructions'))
     application.add_handler(CallbackQueryHandler(download_app, pattern='download_app'))
     application.add_handler(CallbackQueryHandler(add_tunnel, pattern='add_tunnel'))

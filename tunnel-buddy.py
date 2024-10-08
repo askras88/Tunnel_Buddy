@@ -1,14 +1,14 @@
 from telegram import Bot, Update
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackContext, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, InlineKeyboardButton, InlineKeyboardMarkup, ContextTypes
 
 # Увеличьте таймаут для запросов к API Telegram (в секундах)
 bot = Bot(token="7906261755:AAHniCWm-5ybmJvFReY7iO8OJi64LvosM_I", request_timeout=30)
 
 # Инициализация бота с увеличенным таймаутом
-app = Application.builder().token("7906261755:AAHniCWm-5ybmJvFReY7iO8OJi64LvosM_I").bot(bot).build()
+app = Application.builder().token("7906261755:AAHniCWm-5ybmJvFReY7iO8OJi64LvosM_I").build()
 
 # Функция для команды /start
-async def start(update: Update, context):
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [InlineKeyboardButton("Почему платный VPN лучше?", callback_data='why_paid')],
         [InlineKeyboardButton("Выбрать подписку", callback_data='choose_subscription')],
@@ -26,7 +26,7 @@ async def start(update: Update, context):
     )
 
 # "Почему платный VPN лучше?"
-async def why_paid(update: Update, context):
+async def why_paid(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     
@@ -44,7 +44,7 @@ async def why_paid(update: Update, context):
     )
 
 # Выбор подписки
-async def choose_subscription(update: Update, context):
+async def choose_subscription(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     
@@ -59,7 +59,7 @@ async def choose_subscription(update: Update, context):
     await query.edit_message_text("Выберите подписку:", reply_markup=reply_markup)
 
 # Способы оплаты
-async def pay_crypto(update: Update, context):
+async def pay_crypto(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     
@@ -73,7 +73,7 @@ async def pay_crypto(update: Update, context):
     await query.edit_message_text("Выберите способ оплаты:", reply_markup=reply_markup)
 
 # Оплата криптовалютой
-async def crypto_payment(update: Update, context: CallbackContext):
+async def crypto_payment(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     
@@ -87,12 +87,14 @@ async def crypto_payment(update: Update, context: CallbackContext):
     )
 
 # Оплата картой
-async def card_payment(update: Update, context: CallbackContext):
+async def card_payment(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     
-    keyboard = [[InlineKeyboardButton("Скопировать номер карты", callback_data='copy_card_number')],
-                [InlineKeyboardButton("Назад", callback_data='pay_crypto')]]
+    keyboard = [
+        [InlineKeyboardButton("Скопировать номер карты", callback_data='copy_card_number')],
+        [InlineKeyboardButton("Назад", callback_data='pay_crypto')]
+    ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
     await query.edit_message_text(
@@ -101,15 +103,15 @@ async def card_payment(update: Update, context: CallbackContext):
     )
 
 # Обработчик копирования номера карты
-async def copy_card_number(update: Update, context: CallbackContext):
+async def copy_card_number(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     
-    # Копируем номер карты в кэш (в этом случае просто отправим его обратно пользователю)
+    # Копируем номер карты в кэш (в данном случае просто отправим его обратно пользователю)
     await query.message.reply_text("Номер карты скопирован в кэш: 2204320368112944")
 
 # Инструкция по подключению
-async def setup_instructions(update: Update, context: CallbackContext):
+async def setup_instructions(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     
@@ -123,7 +125,7 @@ async def setup_instructions(update: Update, context: CallbackContext):
     await query.edit_message_text("Гайд по установке и добавлению VPN туннеля:", reply_markup=reply_markup)
 
 # Скачать приложение
-async def download_app(update: Update, context: CallbackContext):
+async def download_app(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     
@@ -139,7 +141,7 @@ async def download_app(update: Update, context: CallbackContext):
     await query.edit_message_text("Выберите ваше устройство:", reply_markup=reply_markup)
 
 # Добавить туннель
-async def add_tunnel(update: Update, context: CallbackContext):
+async def add_tunnel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     

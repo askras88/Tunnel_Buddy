@@ -16,7 +16,8 @@ def start_menu():
     keyboard = [
         [InlineKeyboardButton("Почему платный VPN лучше?", callback_data='why_vpn')],
         [InlineKeyboardButton("Выбрать подписку", callback_data='choose_subscription')],
-        [InlineKeyboardButton("Инструкция по подключению", callback_data='instructions')]
+        [InlineKeyboardButton("Инструкция по подключению", callback_data='instructions')],
+        [InlineKeyboardButton("Скачать приложение", callback_data='download_app')]  # Добавлено: кнопка "Скачать приложение"
     ]
     return InlineKeyboardMarkup(keyboard)
 
@@ -92,6 +93,23 @@ async def instructions(update: Update, context):
     await query.answer()
     await query.edit_message_text(text=INSTRUCTIONS_TEXT, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Назад", callback_data='back')]]))
 
+# Блок «Скачать приложение»
+async def download_app(update: Update, context):
+    query = update.callback_query
+    await query.answer()
+    await query.edit_message_text(text="Выберите устройство:", reply_markup=download_menu())
+
+# Меню для загрузки приложения
+def download_menu():
+    keyboard = [
+        [InlineKeyboardButton("iPhone", url="https://itunes.apple.com/app/outline-app/id1356177741")],
+        [InlineKeyboardButton("Android", url="https://play.google.com/store/apps/details?id=org.outline.android.client")],
+        [InlineKeyboardButton("Windows", url="https://s3.amazonaws.com/outline-releases/client/windows/stable/Outline-Client.exe")],
+        [InlineKeyboardButton("macOS", url="https://itunes.apple.com/app/outline-app/id1356178125")],
+        [InlineKeyboardButton("Назад", callback_data='back')]
+    ]
+    return InlineKeyboardMarkup(keyboard)
+
 # Обработка нажатий кнопок
 async def button_handler(update: Update, context):
     query = update.callback_query
@@ -110,7 +128,9 @@ async def button_handler(update: Update, context):
     elif data == 'sub_1y':
         await query.edit_message_text(text="Вы выбрали подписку на 1 год. Выберите способ оплаты:", reply_markup=payment_menu())
     elif data == 'instructions':
-        await instructions(update, context)  # Добавлено: обработка нажатия на инструкцию
+        await instructions(update, context)
+    elif data == 'download_app':  # Добавлено: обработка нажатия на кнопку "Скачать приложение"
+        await download_app(update, context)
     elif data == 'back':
         await start(update, context)  # Чтобы кнопка Назад возвращала на предыдущий экран, нужно будет изменить логику
     elif data == 'crypto':

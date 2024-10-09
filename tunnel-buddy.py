@@ -63,10 +63,14 @@ CRYPTO_PAYMENT = """💰 Номер кошелька: `0x34b46b61f1ea155de045c4b
 async def crypto_payment(update: Update, context):
     query = update.callback_query
     await query.answer()
-    await query.edit_message_text(text=CRYPTO_PAYMENT, reply_markup=InlineKeyboardMarkup([
-        [InlineKeyboardButton("Отправить txid", url="https://t.me/askras88")],
-        [InlineKeyboardButton("Назад", callback_data='back_to_payment')]
-    ]))
+    await query.edit_message_text(
+        text=CRYPTO_PAYMENT, 
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("Отправить txid", url="https://t.me/askras88")],
+            [InlineKeyboardButton("Назад", callback_data='back_to_payment')]
+        ]),
+        parse_mode='Markdown'  # Добавлено для поддержки моноширокого шрифта
+    )
 
 # Блок «Оплата банковской картой»
 CARD_PAYMENT = """💳 Номер карты: `2204320368112944`"""

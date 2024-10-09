@@ -65,7 +65,7 @@ async def crypto_payment(update: Update, context):
     await query.answer()
     await query.edit_message_text(text=CRYPTO_PAYMENT, reply_markup=InlineKeyboardMarkup([
         [InlineKeyboardButton("Отправить txid", url="https://t.me/askras88")],
-        [InlineKeyboardButton("Назад", callback_data='back_to_payment')]
+        [InlineKeyboardButton("Назад", callback_data='back_to_subscription')]
     ]))
 
 # Блок «Оплата банковской картой»
@@ -76,7 +76,7 @@ async def card_payment(update: Update, context):
     await query.answer()
     await query.edit_message_text(text=CARD_PAYMENT, reply_markup=InlineKeyboardMarkup([
         [InlineKeyboardButton("Отправить чек", url="https://t.me/askras88")],
-        [InlineKeyboardButton("Назад", callback_data='back_to_payment')]
+        [InlineKeyboardButton("Назад", callback_data='back_to_subscription')]
     ]))
 
 # Блок «Инструкция по подключению»
@@ -133,8 +133,8 @@ async def button_handler(update: Update, context):
         await download_app(update, context)
     elif data == 'back_to_start':
         await start(update, context)  # Возврат в стартовое меню
-    elif data == 'back_to_payment':
-        await query.edit_message_text(text="Выберите способ оплаты:", reply_markup=payment_menu())
+    elif data == 'back_to_subscription':
+        await query.edit_message_text(text="Выберите подписку:", reply_markup=subscription_menu())
     elif data == 'crypto':
         await crypto_payment(update, context)
     elif data == 'card':

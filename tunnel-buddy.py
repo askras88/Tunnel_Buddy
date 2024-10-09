@@ -23,12 +23,8 @@ def start_menu():
 # Команда /start
 async def start(update: Update, context):
     chat_id = update.effective_chat.id
-    await context.bot.send_photo(
-        chat_id=chat_id, 
-        photo="https://freeimage.host/i/dpppkxI", 
-        caption=WELCOME_MESSAGE, 
-        reply_markup=start_menu()
-    )
+    await context.bot.send_photo(chat_id=chat_id, photo="https://freeimage.host/i/dpppkxI")
+    await context.bot.send_message(chat_id=chat_id, text=WELCOME_MESSAGE, reply_markup=start_menu())
 
 # Блок «Почему платный VPN лучше?»
 WHY_VPN_TEXT = """🤔 Почему стоит выбрать платный VPN?
@@ -42,10 +38,7 @@ WHY_VPN_TEXT = """🤔 Почему стоит выбрать платный VPN
 async def why_vpn(update: Update, context):
     query = update.callback_query
     await query.answer()
-    await query.edit_message_text(
-        text=WHY_VPN_TEXT, 
-        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Назад", callback_data='back_to_start')]])
-    )
+    await query.edit_message_text(text=WHY_VPN_TEXT, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Назад", callback_data='back')]]))
 
 # Блок «Выбрать подписку»
 def subscription_menu():
@@ -53,17 +46,14 @@ def subscription_menu():
         [InlineKeyboardButton("1 месяц / 2 $USDT / 200 RUB", callback_data='sub_1m')],
         [InlineKeyboardButton("3 месяца / 5 $USDT / 500 RUB", callback_data='sub_3m')],
         [InlineKeyboardButton("1 год / 15 $USDT / 1500 RUB", callback_data='sub_1y')],
-        [InlineKeyboardButton("Назад", callback_data='back_to_start')]
+        [InlineKeyboardButton("Назад", callback_data='back')]
     ]
     return InlineKeyboardMarkup(keyboard)
 
 async def choose_subscription(update: Update, context):
     query = update.callback_query
     await query.answer()
-    await query.edit_message_text(
-        text="Выберите подписку:", 
-        reply_markup=subscription_menu()
-    )
+    await query.edit_message_text(text="Выберите подписку:", reply_markup=subscription_menu())
 
 # Блок «Оплата криптовалютой»
 CRYPTO_PAYMENT = """💰 Номер кошелька: `0x34b46b61f1ea155de045c4b840932067c6087918`
@@ -72,13 +62,10 @@ CRYPTO_PAYMENT = """💰 Номер кошелька: `0x34b46b61f1ea155de045c4b
 async def crypto_payment(update: Update, context):
     query = update.callback_query
     await query.answer()
-    await query.edit_message_text(
-        text=CRYPTO_PAYMENT, 
-        reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton("Отправить txid", url="https://t.me/askras88")],
-            [InlineKeyboardButton("Назад", callback_data='back_to_payment')]
-        ])
-    )
+    await query.edit_message_text(text=CRYPTO_PAYMENT, reply_markup=InlineKeyboardMarkup([
+        [InlineKeyboardButton("Отправить txid", url="https://t.me/askras88")],
+        [InlineKeyboardButton("Назад", callback_data='back')]
+    ]))
 
 # Блок «Оплата банковской картой»
 CARD_PAYMENT = """💳 Номер карты: `2204320368112944`"""
@@ -86,18 +73,17 @@ CARD_PAYMENT = """💳 Номер карты: `2204320368112944`"""
 async def card_payment(update: Update, context):
     query = update.callback_query
     await query.answer()
-    await query.edit_message_text(
-        text=CARD_PAYMENT, 
-        reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton("Отправить чек", url="https://t.me/askras88")],
-            [InlineKeyboardButton("Назад", callback_data='back_to_payment')]
-        ])
-    )
+    await query.edit_message_text(text=CARD_PAYMENT, reply_markup=InlineKeyboardMarkup([
+        [InlineKeyboardButton("Отправить чек", url="https://t.me/askras88")],
+        [InlineKeyboardButton("Назад", callback_data='back')]
+    ]))
 
 # Обработка нажатий кнопок
 async def button_handler(update: Update, context):
     query = update.callback_query
     data = query.data
+    logger.info(f"Button pressed: {data}")
+    await query.answer()
 
     if data == 'why_vpn':
         await why_vpn(update, context)
@@ -109,10 +95,8 @@ async def button_handler(update: Update, context):
         await query.edit_message_text(text="Вы выбрали подписку на 3 месяца. Выберите способ оплаты:", reply_markup=payment_menu())
     elif data == 'sub_1y':
         await query.edit_message_text(text="Вы выбрали подписку на 1 год. Выберите способ оплаты:", reply_markup=payment_menu())
-    elif data == 'back_to_start':
-        await start(update, context)
-    elif data == 'back_to_payment':
-        await query.edit_message_text(text="Выберите способ оплаты:", reply_markup=payment_menu())
+    elif data == 'back':
+        await start(update, context)  # Чтобы кнопка Назад возвращала на предыдущий экран, нужно будет изменить логику
     elif data == 'crypto':
         await crypto_payment(update, context)
     elif data == 'card':
@@ -123,7 +107,7 @@ def payment_menu():
     keyboard = [
         [InlineKeyboardButton("Криптовалютой", callback_data='crypto')],
         [InlineKeyboardButton("Банковской картой", callback_data='card')],
-        [InlineKeyboardButton("Назад", callback_data='back_to_subscription')]
+        [InlineKeyboardButton("Назад", callback_data='back')]
     ]
     return InlineKeyboardMarkup(keyboard)
 

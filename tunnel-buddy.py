@@ -78,6 +78,20 @@ async def card_payment(update: Update, context):
         [InlineKeyboardButton("Назад", callback_data='back')]
     ]))
 
+# Блок «Инструкция по подключению»
+INSTRUCTIONS_TEXT = """🛠️ Инструкция по подключению:
+
+1. Скачайте и установите приложение Tunnel Buddy на ваше устройство.
+2. Запустите приложение и введите свои учетные данные.
+3. Выберите сервер, к которому хотите подключиться.
+4. Нажмите на кнопку "Подключиться" и дождитесь успешного соединения.
+5. Теперь вы можете наслаждаться безопасным интернет-серфингом! 🌐"""
+
+async def instructions(update: Update, context):
+    query = update.callback_query
+    await query.answer()
+    await query.edit_message_text(text=INSTRUCTIONS_TEXT, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Назад", callback_data='back')]]))
+
 # Обработка нажатий кнопок
 async def button_handler(update: Update, context):
     query = update.callback_query
@@ -95,6 +109,8 @@ async def button_handler(update: Update, context):
         await query.edit_message_text(text="Вы выбрали подписку на 3 месяца. Выберите способ оплаты:", reply_markup=payment_menu())
     elif data == 'sub_1y':
         await query.edit_message_text(text="Вы выбрали подписку на 1 год. Выберите способ оплаты:", reply_markup=payment_menu())
+    elif data == 'instructions':
+        await instructions(update, context)  # Добавлено: обработка нажатия на инструкцию
     elif data == 'back':
         await start(update, context)  # Чтобы кнопка Назад возвращала на предыдущий экран, нужно будет изменить логику
     elif data == 'crypto':

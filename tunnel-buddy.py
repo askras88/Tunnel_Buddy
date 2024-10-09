@@ -22,11 +22,14 @@ def start_menu():
     return InlineKeyboardMarkup(keyboard)
 
 # Команда /start
-async def start(update: Update, context):
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
-    await context.bot.send_photo(chat_id=chat_id, photo="https://freeimage.host/i/dpppkxI")
-    await context.bot.send_message(chat_id=chat_id, text=WELCOME_MESSAGE, reply_markup=start_menu())
-
+    await context.bot.send_photo(
+        chat_id=chat_id,
+        photo="https://freeimage.host/i/dpppkxI",
+        caption=WELCOME_MESSAGE,
+        reply_markup=start_menu()
+    )
 # Блок «Почему платный VPN лучше?»
 WHY_VPN_TEXT = """🤔 Почему стоит выбрать платный VPN?
 

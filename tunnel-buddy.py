@@ -145,7 +145,7 @@ def payment_menu():
     keyboard = [
         [InlineKeyboardButton("Криптовалютой", callback_data='crypto')],
         [InlineKeyboardButton("Банковской картой", callback_data='card')],
-        [InlineKeyboardButton("Назад", callback_data='back_to_start')]
+        [InlineKeyboardButton("Назад", callback_data='back_to_payment')]
     ]
     return InlineKeyboardMarkup(keyboard)
 

@@ -73,13 +73,12 @@ async def crypto_payment(update: Update, context):
     )
 
 # Блок «Оплата банковской картой»
-CARD_PAYMENT = """💳 Номер карты: `2204320368112944`
-💳 Номер кошелька: `0x34b46b61f1ea155de045c4b840932067c6087918`"""
+CARD_PAYMENT = """💳 Номер карты: `2204320368112944`"""
 
 async def card_payment(update: Update, context):
     query = update.callback_query
     await query.answer()
-    await query.edit_message_text(text=CARD_PAYMENT, reply_markup=InlineKeyboardMarkup([
+    await query.edit_message_text(text=CARD_PAYMENT, parse_mode='MarkdownV2', reply_markup=InlineKeyboardMarkup([
         [InlineKeyboardButton("Отправить чек", url="https://t.me/askras88")],
         [InlineKeyboardButton("Назад", callback_data='back_to_payment')]
     ]))

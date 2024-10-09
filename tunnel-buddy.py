@@ -27,40 +27,31 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_photo(chat_id=chat_id, photo="https://freeimage.host/i/dpppkxI")
     await context.bot.send_message(chat_id=chat_id, text=WELCOME_MESSAGE, reply_markup=start_menu())
 
-# Обработка нажатий кнопок
-async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    query = update.callback_query
-    data = query.data
-    logger.info(f"Button pressed: {data}")
-    await query.answer()
-
-    if data == 'why_vpn':
-        await why_vpn(update, context)
-    elif data == 'choose_subscription':
-        await choose_subscription(update, context)
-    elif data == 'instructions':
-        await instructions(update, context)
-    elif data == 'download_app':
-        await download_app(update, context)
-    elif data == 'back':
-        if context.user_data.get('prev_menu') == 'instructions':
-            await instructions(update, context)  # Возврат в инструкции
-        elif context.user_data.get('prev_menu') == 'download_app':
-            await download_app(update, context)  # Возврат в меню загрузки
-        else:
-            await start(update, context)  # Возврат в стартовое меню
-    else:
-        # Логика для других кнопок
-        pass
-
 # Блок «Почему платный VPN лучше?»
 async def why_vpn(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     context.user_data['prev_menu'] = 'why_vpn'
-    await query.edit_message_text(text="🤔 Почему стоит выбрать платный VPN?", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Назад", callback_data='back')]]))
+    WHY_VPN_TEXT = """🤔 Почему стоит выбрать платный VPN?
+    
+1. 🚀 Максимальная скорость — с Tunnel Buddy ваша интернет-скорость остается такой же быстрой, как у вашего провайдера. Никаких урезаний или лагов!
+2. 💸 Лучшее соотношение цены и качества — один из самых дешёвых VPN на рынке, но с премиальными возможностями.
+3. 📱💻🖥️ Мультиустройство — подключайте несколько устройств без дополнительных подписок.
+4. 🔐 Приватность на 100% — ваши данные конфиденциальны, ни одного следа в сети.
+5. 🌍 Доступ ко всему миру — обходите блокировки и наслаждайтесь контентом без ограничений!"""
+    
+    await query.edit_message_text(text=WHY_VPN_TEXT, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Назад", callback_data='back')]]))
 
 # Блок «Выбрать подписку»
+def subscription_menu():
+    keyboard = [
+        [InlineKeyboardButton("1 месяц / 2 $USDT / 200 RUB", callback_data='sub_1m')],
+        [InlineKeyboardButton("3 месяца / 5 $USDT / 500 RUB", callback_data='sub_3m')],
+        [InlineKeyboardButton("1 год / 15 $USDT / 1500 RUB", callback_data='sub_1y')],
+        [InlineKeyboardButton("Назад", callback_data='back')]
+    ]
+    return InlineKeyboardMarkup(keyboard)
+
 async def choose_subscription(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
@@ -92,9 +83,32 @@ def download_menu():
     ]
     return InlineKeyboardMarkup(keyboard)
 
+# Обработка нажатий кнопок
+async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    data = query.data
+    logger.info(f"Button pressed: {data}")
+    await query.answer()
+
+    if data == 'why_vpn':
+        await why_vpn(update, context)
+    elif data == 'choose_subscription':
+        await choose_subscription(update, context)
+    elif data == 'instructions':
+        await instructions(update, context)
+    elif data == 'download_app':
+        await download_app(update, context)
+    elif data == 'back':
+        if context.user_data.get('prev_menu') == 'instructions':
+            await instructions(update, context)
+        elif context.user_data.get('prev_menu') == 'download_app':
+            await download_app(update, context)
+        else:
+            await start(update, context)
+
 # Основной код
 if __name__ == '__main__':
-    application = ApplicationBuilder().token('7906261755:AAHniCWm-5ybmJvFReY7iO8OJi64LvosM_I').build()
+    application = ApplicationBuilder().token('YOUR_TOKEN_HERE').build()
 
     # Команды и обработчики
     application.add_handler(CommandHandler("start", start))

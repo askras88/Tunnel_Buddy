@@ -155,7 +155,7 @@ def payment_menu():
 
 # Main code
 if __name__ == '__main__':
-    application = ApplicationBuilder().token('YOUR_BOT_TOKEN').build()
+    application = ApplicationBuilder().token(''7906261755:AAHniCWm-5ybmJvFReY7iO8OJi64LvosM_I'').build()
 
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CallbackQueryHandler(button_handler))

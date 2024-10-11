@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 # Стартовое сообщение
 WELCOME_MESSAGE = """👋 Привет, интернет-ковбой! 🤠 Готов покорять просторы сети без ограничений? 
-С Tunnel Buddy ты можешь смотреть видео в высоком разрешении и не париться о скорости! 🚀 Чекать свой eligible, наслаждаться Youtube, бороздить Rutracker, играть в покер 🃏 или серфить Pornhub без логина. Плюс, он стоит меньше, чем твой последний NFT! 💸
+С Tunnel Buddy ты можешь смотреть видео в высоком разрешении и не париться о скорости! 🚀 Чекать свой eligible, наслаждаться Youtube или Instagram, бороздить Rutracker, играть в покер 🃏 или серфить Pornhub без логина. Плюс, он стоит меньше, чем твой последний NFT! 💸
 Подключай свои устройства и забудь о блокировках, как о своей последней неудачной криптоинвестиции! 😂"""
 
 # Клавиатура стартового меню
@@ -114,8 +114,21 @@ def download_menu():
         [InlineKeyboardButton("Назад", callback_data='back_to_start')]
     ]
     return InlineKeyboardMarkup(keyboard)
+
+# Обработка нажатий кнопок
+async def button_handler(update: Update, context):
+    query = update.callback_query
+    data = query.data
+    logger.info(f"Button pressed: {data}")
+    await query.answer()
     
-    # Меню для загрузки другого приложения
+    # Блок «Скачать другое приложение»
+async def download_other_app(update: Update, context):
+    query = update.callback_query
+    await query.answer()
+    await query.edit_message_text(text="Выберите устройство:", reply_markup=other_app_menu())
+
+# Меню для загрузки другого приложения
 def other_app_menu():
     keyboard = [
         [InlineKeyboardButton("iPhone", url="https://apps.apple.com/ru/app/%D0%B4%D1%8F%D0%B4%D1%8F-%D0%B2%D0%B0%D0%BD%D1%8F-vpn/id1618096210")],
@@ -137,6 +150,12 @@ async def button_handler(update: Update, context):
         await why_vpn(update, context)
     elif data == 'choose_subscription':
         await choose_subscription(update, context)
+    elif data == 'sub_1m':
+        await query.edit_message_text(text="Вы выбрали подписку на 1 месяц. Выберите способ оплаты:", reply_markup=payment_menu())
+    elif data == 'sub_3m':
+        await query.edit_message_text(text="Вы выбрали подписку на 3 месяца. Выберите способ оплаты:", reply_markup=payment_menu())
+    elif data == 'sub_1y':
+        await query.edit_message_text(text="Вы выбрали подписку на 1 год. Выберите способ оплаты:", reply_markup=payment_menu())
     elif data == 'instructions':
         await instructions(update, context)
     elif data == 'download_app':
@@ -144,7 +163,22 @@ async def button_handler(update: Update, context):
     elif data == 'download_other_app':
         await download_other_app(update, context)
     elif data == 'back_to_start':
-        await start(update, context)
+        await start(update, context)  # Возврат в стартовое меню
+    elif data == 'back_to_payment':
+        await query.edit_message_text(text="Выберите способ оплаты:", reply_markup=payment_menu())
+    elif data == 'crypto':
+        await crypto_payment(update, context)
+    elif data == 'card':
+        await card_payment(update, context)
+
+# Меню способов оплаты
+def payment_menu():
+    keyboard = [
+        [InlineKeyboardButton("Криптовалютой", callback_data='crypto')],
+        [InlineKeyboardButton("Банковской картой", callback_data='card')],
+        [InlineKeyboardButton("Назад", callback_data='choose_subscription')]
+    ]
+    return InlineKeyboardMarkup(keyboard)
 
 # Основной код
 if __name__ == '__main__':

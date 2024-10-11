@@ -87,7 +87,7 @@ async def card_payment(update: Update, context):
 # Блок «Инструкция по подключению»
 INSTRUCTIONS_TEXT = """ 🛠️ Инструкция по добавлению туннеля в VPN Outline:
 
-1. Установите приложение Outline на ваше устройство.
+1. Установите приложение Outline или ДядяВаня на ваше устройство.
 2. Откройте приложение и выберите "Добавить туннель" или нажмите на «+».
 3. Вставьте ключ доступа, который вы получили от Buddy.
 4. Нажмите "Подключиться".
@@ -151,11 +151,11 @@ async def button_handler(update: Update, context):
     elif data == 'choose_subscription':
         await choose_subscription(update, context)
     elif data == 'sub_1m':
-        await query.edit_message_text(text="Вы выбрали подписку на 1 месяц. Выберите способ оплаты:", reply_markup=payment_menu())
+        await query.edit_message_text(text="Вы выбрали подписку на 1 месяц за 2 $USDT / 200 RUB. Выберите способ оплаты:", reply_markup=payment_menu())
     elif data == 'sub_3m':
-        await query.edit_message_text(text="Вы выбрали подписку на 3 месяца. Выберите способ оплаты:", reply_markup=payment_menu())
+        await query.edit_message_text(text="Вы выбрали подписку на 3 месяца за 5 $USDT / 500 RUB. Выберите способ оплаты:", reply_markup=payment_menu())
     elif data == 'sub_1y':
-        await query.edit_message_text(text="Вы выбрали подписку на 1 год. Выберите способ оплаты:", reply_markup=payment_menu())
+        await query.edit_message_text(text="Вы выбрали подписку на 1 год за 15 $USDT / 1500 RUB. Выберите способ оплаты:", reply_markup=payment_menu())
     elif data == 'instructions':
         await instructions(update, context)
     elif data == 'download_app':

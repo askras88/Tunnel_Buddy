@@ -17,7 +17,8 @@ def start_menu():
         [InlineKeyboardButton("Почему платный VPN лучше?", callback_data='why_vpn')],
         [InlineKeyboardButton("Выбрать подписку", callback_data='choose_subscription')],
         [InlineKeyboardButton("Инструкция по подключению", callback_data='instructions')],
-        [InlineKeyboardButton("Скачать приложение", callback_data='download_app')]
+        [InlineKeyboardButton("Скачать приложение", callback_data='download_app')],
+        [InlineKeyboardButton("Скачать другое приложение", callback_data='download_other_app')]
     ]
     return InlineKeyboardMarkup(keyboard)
 
@@ -57,7 +58,7 @@ async def choose_subscription(update: Update, context):
     await query.edit_message_text(text="Выберите подписку:", reply_markup=subscription_menu())
 
 # Блок «Оплата криптовалютой»
-CRYPTO_PAYMENT = """💰 Номер кошелька копируется при нажатии: `0x34b46b61f1ea155de045c4b840932067c6087918`
+CRYPTO_PAYMENT = """💰 Номер кошелька копируется при нажатии: `0x99f5b3748f9e8d5e13e20639cc986ab53b6be753`
 Принимаем $USDT в сетях: ERC20, BSC, POLYGON, BASE, SCROLL"""
 
 async def crypto_payment(update: Update, context):
@@ -110,6 +111,17 @@ def download_menu():
         [InlineKeyboardButton("Android", url="https://play.google.com/store/apps/details?id=org.outline.android.client")],
         [InlineKeyboardButton("Windows", url="https://s3.amazonaws.com/outline-releases/client/windows/stable/Outline-Client.exe")],
         [InlineKeyboardButton("macOS", url="https://itunes.apple.com/app/outline-app/id1356178125")],
+        [InlineKeyboardButton("Назад", callback_data='back_to_start')]
+    ]
+    return InlineKeyboardMarkup(keyboard)
+    
+    # Меню для загрузки другого приложения
+def other_app_menu():
+    keyboard = [
+        [InlineKeyboardButton("iPhone", url="https://apps.apple.com/ru/app/%D0%B4%D1%8F%D0%B4%D1%8F-%D0%B2%D0%B0%D0%BD%D1%8F-vpn/id1618096210")],
+        [InlineKeyboardButton("Android", url="https://play.google.com/store/apps/details?id=com.vanyavpn.android.client")],
+        [InlineKeyboardButton("Windows", url="https://amazonvpn.s3.amazonaws.com/VanyaVPN.exe")],
+        [InlineKeyboardButton("macOS", url="https://apps.apple.com/ru/app/vanyavpn/id6444087613")],
         [InlineKeyboardButton("Назад", callback_data='back_to_start')]
     ]
     return InlineKeyboardMarkup(keyboard)

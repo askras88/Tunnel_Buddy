@@ -137,33 +137,14 @@ async def button_handler(update: Update, context):
         await why_vpn(update, context)
     elif data == 'choose_subscription':
         await choose_subscription(update, context)
-    elif data == 'sub_1m':
-        await query.edit_message_text(text="Вы выбрали подписку на 1 месяц. Выберите способ оплаты:", reply_markup=payment_menu())
-    elif data == 'sub_3m':
-        await query.edit_message_text(text="Вы выбрали подписку на 3 месяца. Выберите способ оплаты:", reply_markup=payment_menu())
-    elif data == 'sub_1y':
-        await query.edit_message_text(text="Вы выбрали подписку на 1 год. Выберите способ оплаты:", reply_markup=payment_menu())
     elif data == 'instructions':
         await instructions(update, context)
     elif data == 'download_app':
         await download_app(update, context)
+    elif data == 'download_other_app':
+        await download_other_app(update, context)
     elif data == 'back_to_start':
-        await start(update, context)  # Возврат в стартовое меню
-    elif data == 'back_to_payment':
-        await query.edit_message_text(text="Выберите способ оплаты:", reply_markup=payment_menu())
-    elif data == 'crypto':
-        await crypto_payment(update, context)
-    elif data == 'card':
-        await card_payment(update, context)
-
-# Меню способов оплаты
-def payment_menu():
-    keyboard = [
-        [InlineKeyboardButton("Криптовалютой", callback_data='crypto')],
-        [InlineKeyboardButton("Банковской картой", callback_data='card')],
-        [InlineKeyboardButton("Назад", callback_data='choose_subscription')]
-    ]
-    return InlineKeyboardMarkup(keyboard)
+        await start(update, context)
 
 # Основной код
 if __name__ == '__main__':
